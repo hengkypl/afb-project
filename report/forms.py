@@ -1,6 +1,6 @@
 from django import forms
 
-from alatberat.models import Hourmeter, Alatberat, Operatorab
+from alatberat.models import Hourmeter, Alatberat, Operatorab, Biayaab
 from .utils import indo_date_to_iso
 
 
@@ -36,3 +36,14 @@ class HourmeterReportForm(DateRangeFormMixin, forms.ModelForm):
         self.fields['operatorid'].widget.attrs = {'class': 'form-control mr-3'}
         self.fields['alatid'].queryset = Alatberat.objects.all()
         self.fields['operatorid'].queryset = Operatorab.objects.all()
+
+
+class BiayaPerAlatReportForm(DateRangeFormMixin, forms.ModelForm):
+    class Meta:
+        model = Biayaab
+        fields = ('alatid', 'start_date', 'end_date')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['alatid'].widget.attrs = {'class': 'form-control mr-3'}
+        self.fields['alatid'].queryset = Alatberat.objects.all()
