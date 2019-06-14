@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.views.generic import ListView, TemplateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -5,6 +6,7 @@ from django.urls import reverse
 from alatberat.models import Hourmeter
 
 from .forms import HourmeterReportForm
+from .utils import indo_date_to_iso
 
 
 # Create your views here.
@@ -27,8 +29,8 @@ class HourmeterReportView(ListView):
             if all(key in get_var for key in self.valid_keys):
                 alat_id = get_var['alatid']
                 operator_id = get_var['operatorid']
-                start_date = get_var['start_date']
-                end_date = get_var['end_date']
+                start_date = indo_date_to_iso(get_var['start_date'])
+                end_date = indo_date_to_iso(get_var['end_date'])
 
                 queryset = self.model.objects.filter(
                     alatid_id=int(alat_id), operatorid_id=int(operator_id), tanggal__range=[start_date, end_date]
@@ -49,13 +51,21 @@ class HourmeterReportView(ListView):
 
     def post(self, request):
         querystring = ""
-        post_var = self.request.POST
+        post_var = request.POST
 
         if post_var:
             if all(key in post_var for key in self.valid_keys):
-                alatid = post_var['alatid']
-                operatorid = post_var['operatorid']
-                start_date = post_var['start_date']
-                end_date = post_var['end_date']
-                querystring = "?alatid={}&operatorid={}&start_date={}&end_date={}".format(alatid, operatorid, start_date, end_date)
+                form = HourmeterReportForm(data=post_var)
+                if form.is_valid():
+                    alatid = form.cleaned_data['alatid']
+                    operatorid = form.cleaned_data['operatorid']
+                    start_date = form.cleaned_data['start_date']
+                    end_date = form.cleaned_data['end_date']
+
+                    querystring = "?alatid={}&operatorid={}&start_date={}&end_date={}".format(
+                        alatid, operatorid, start_date, end_date
+                    )
+                else:
+                    messages.add_message(request, messages.ERROR, form.errors)
+
         return HttpResponseRedirect(reverse('report:hour_meter') + querystring)

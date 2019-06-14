@@ -1,11 +1,31 @@
 from django import forms
+
 from alatberat.models import Hourmeter, Alatberat, Operatorab
+from .utils import indo_date_to_iso
 
 
-class HourmeterReportForm(forms.ModelForm):
-    start_date = forms.DateField()
-    end_date = forms.DateField()
+class DateRangeFormMixin(forms.Form):
+    start_date = forms.DateField(required=True)
+    end_date = forms.DateField(required=True)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['start_date'].widget.attrs = {'class': 'form-control mr-3', "placeholder": "Start Date"}
+        self.fields['end_date'].widget.attrs = {'class': 'form-control mr-3', "placeholder": "End Date"}
+
+    def clean_start_date(self):
+        start_date = self.data['start_date']
+        end_date = self.data['end_date']
+        if start_date > end_date:
+            raise forms.ValidationError('Mohon periksa kembali tanggal pencarian anda')
+        return indo_date_to_iso(start_date)
+
+    def clean_end_date(self):
+        end_date = self.data['end_date']
+        return indo_date_to_iso(end_date)
+
+
+class HourmeterReportForm(DateRangeFormMixin, forms.ModelForm):
     class Meta:
         model = Hourmeter
         fields = ('alatid', 'operatorid')
@@ -14,7 +34,5 @@ class HourmeterReportForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['alatid'].widget.attrs = {'class': 'form-control mr-3'}
         self.fields['operatorid'].widget.attrs = {'class': 'form-control mr-3'}
-        self.fields['start_date'].widget.attrs = {'class': 'form-control mr-3', "placeholder": "Start Date"}
-        self.fields['end_date'].widget.attrs = {'class': 'form-control mr-3', "placeholder": "End Date"}
         self.fields['alatid'].queryset = Alatberat.objects.all()
         self.fields['operatorid'].queryset = Operatorab.objects.all()

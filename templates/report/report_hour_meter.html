@@ -72,4 +72,20 @@
     </div>
   </div>
 
+  <script>
+    window.addEventListener('DOMContentLoaded', function(){
+      var start_date = document.querySelector('input[name="start_date"]')
+      var end_date = document.querySelector('input[name="end_date"]')
+
+      start_date.DatePickerX.init({
+        format: "dd-mm-yyyy"
+      });
+
+      end_date.DatePickerX.init({
+        format: "dd-mm-yyyy"
+      });
+
+    });
+  </script>
+
 {% endblock %}
