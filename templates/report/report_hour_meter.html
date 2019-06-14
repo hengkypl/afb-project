@@ -33,42 +33,49 @@
       </form>
     </div>
     <div class="card-deck mb-3 text-center">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Tanggal</th>
-            <th>Operator</th>
-            <th>Hm Awal</th>
-            <th>Hm Akhir</th>
-            <th>Jam</th>
-            <th>Hm Dunia</th>
-            <th>Overtime</th>
-            <th>Shift</th>
-            <th>Keterangan</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for obj in object_list%}
+      <h3>Search result for</h3>
+        <table class="table table-bordered">
+          <thead>
             <tr>
-              <td>{{obj.created}}</td>
-              <td>{{obj.operator_name}}</td>
-              <td>{{obj.hmawal}}</td>
-              <td>{{obj.hmakhir}}</td>
-              <td>{{obj.jam}}</td>
-              <td>{{obj.hmdunia}}</td>
-              <td>{{obj.ot}}</td>
-              <td>{{obj.shift}}</td>
-              <td>{{obj.keterangan}}</td>
+              <th>Tanggal</th>
+              <th>Operator</th>
+              <th>Hm Awal</th>
+              <th>Hm Akhir</th>
+              <th>Jam</th>
+              <th>Hm Dunia</th>
+              <th>Overtime</th>
+              <th>Shift</th>
+              <th>Keterangan</th>
             </tr>
-          {% endfor %}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td class="text-right" colspan="8">Total Jam</td>
-            <td>{{total}}</td>
-          </tr>
-        </tfoot>
-      </table>
+          </thead>
+          <tbody>
+            {% if object_list %}
+              {% for obj in object_list%}
+                <tr>
+                  <td>{{obj.created}}</td>
+                  <td>{{obj.operator_name}}</td>
+                  <td>{{obj.hmawal}}</td>
+                  <td>{{obj.hmakhir}}</td>
+                  <td>{{obj.jam}}</td>
+                  <td>{{obj.hmdunia}}</td>
+                  <td>{{obj.ot}}</td>
+                  <td>{{obj.shift}}</td>
+                  <td>{{obj.keterangan}}</td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="9">No Data</td>
+              </tr>
+            {% endif %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td class="text-right" colspan="8">Total Jam</td>
+              <td>{{total}}</td>
+            </tr>
+          </tfoot>
+        </table>
     </div>
   </div>
 

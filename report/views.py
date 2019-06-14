@@ -23,7 +23,6 @@ class HourmeterReportView(ListView):
         get_var = self.request.GET
 
         if get_var:
-
             # Ensure all parameters are not empty
             if all(key in get_var for key in self.valid_keys):
                 alat_id = get_var['alatid']
