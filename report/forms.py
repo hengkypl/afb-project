@@ -1,9 +1,13 @@
 from django import forms
 
-from alatberat.models import Hourmeter, Alatberat, Operatorab, Biayaab
+from alatberat.models import Hourmeter, Alatberat, Operatorab, Biayaab, Bbmab
 from .utils import indo_date_to_iso
 
+"""
+ALAT BERAT FORM
+"""
 
+# Mixin for date range form
 class DateRangeFormMixin(forms.Form):
     start_date = forms.DateField(required=True)
     end_date = forms.DateField(required=True)
@@ -47,3 +51,12 @@ class BiayaPerAlatReportForm(DateRangeFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['alatid'].widget.attrs = {'class': 'form-control mr-3'}
         self.fields['alatid'].queryset = Alatberat.objects.all()
+
+
+class BiayaPerTanggalReportForm(DateRangeFormMixin):
+    pass
+
+
+# Inherit Biaya per alat form due to the similarity
+class BBMReportForm(BiayaPerAlatReportForm):
+    pass

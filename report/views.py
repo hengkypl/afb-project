@@ -1,22 +1,34 @@
 from django.contrib import messages
-from django.views.generic import ListView, TemplateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
-from alatberat.models import Hourmeter, Biayaab
-
-from .forms import HourmeterReportForm, BiayaPerAlatReportForm
+from django.views.generic import ListView, TemplateView
 
 
-# Create your views here.
+from alatberat.models import Bbmab, Biayaab, Hourmeter
+from bbm.models import Transaksitangkiinduk
+
+from .forms import HourmeterReportForm, BiayaPerAlatReportForm, BiayaPerTanggalReportForm, BBMReportForm
+
+"""
+REPORT INDEX
+"""
+
+
 class ReportIndexView(TemplateView):
     template_name = 'report/report_index.html'
+
+
+"""
+REPORT ALAT BERAT
+"""
 
 
 class HourmeterReportView(ListView):
     template_name = 'report/report_hour_meter.html'
     model = Hourmeter
     valid_keys = ['alatid', 'operatorid', 'start_date', 'end_date']
+    prefilled_keys = ['alatid', 'operatorid']
+    form = HourmeterReportForm
 
     def get_queryset(self):
         queryset = None
@@ -37,13 +49,26 @@ class HourmeterReportView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        total = 0
-        form = HourmeterReportForm
+        total_jam = 0
+        total_hm_dunia = 0
+        total_overtime = 0
+        form_data = {}
+
+        for key in self.prefilled_keys:
+            try:
+                form_data[key] = self.request.GET[key]
+            except KeyError:
+                pass
+        form = self.form(data=form_data)
 
         if context['object_list']:
             for obj in context['object_list']:
-                total += obj.jam
-        context['total'] = total
+                total_jam += obj.jam
+                total_hm_dunia += obj.hmdunia
+                total_overtime += obj.ot
+        context['total_jam'] = total_jam
+        context['total_hm_dunia'] = total_hm_dunia
+        context['total_overtime'] = total_overtime
         context['form'] = form
         return context
 
@@ -53,7 +78,7 @@ class HourmeterReportView(ListView):
 
         if post_var:
             if all(key in post_var for key in self.valid_keys):
-                form = HourmeterReportForm(data=post_var)
+                form = self.form(data=post_var)
                 if form.is_valid():
                     alatid = form.cleaned_data['alatid'].id
                     operatorid = form.cleaned_data['operatorid'].id
@@ -73,6 +98,8 @@ class BiayaabPerAlatReportView(ListView):
     template_name = 'report/report_biaya_ab_alat.html'
     model = Biayaab
     valid_keys = ['alatid', 'start_date', 'end_date']
+    prefilled_keys = ['alatid']
+    form = BiayaPerAlatReportForm
 
     def get_queryset(self):
         queryset = None
@@ -93,7 +120,14 @@ class BiayaabPerAlatReportView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         total = 0
-        form = BiayaPerAlatReportForm
+        form_data = {}
+
+        for key in self.prefilled_keys:
+            try:
+                form_data[key] = self.request.GET[key]
+            except KeyError:
+                pass
+        form = self.form(data=form_data)
 
         if context['object_list']:
             for obj in context['object_list']:
@@ -108,7 +142,7 @@ class BiayaabPerAlatReportView(ListView):
 
         if post_var:
             if all(key in post_var for key in self.valid_keys):
-                form = BiayaPerAlatReportForm(data=post_var)
+                form = self.form(data=post_var)
                 if form.is_valid():
                     alatid = form.cleaned_data['alatid'].id
                     start_date = form.cleaned_data['start_date']
@@ -121,3 +155,118 @@ class BiayaabPerAlatReportView(ListView):
                     messages.add_message(request, messages.ERROR, form.errors)
 
         return HttpResponseRedirect(reverse('report:biaya_per_alat') + querystring)
+
+
+class BiayaabPerTanggalReportView(ListView):
+    template_name = 'report/report_biaya_ab_tanggal.html'
+    model = Biayaab
+    valid_keys = ['start_date', 'end_date']
+    form = BiayaPerTanggalReportForm
+
+    def get_queryset(self):
+        queryset = None
+        get_var = self.request.GET
+
+        if get_var:
+            # Ensure all parameters are not empty
+            if all(key in get_var for key in self.valid_keys):
+                start_date = get_var['start_date']
+                end_date = get_var['end_date']
+
+                queryset = self.model.objects.filter(
+                    tanggal__range=[start_date, end_date]
+                )
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        total = 0
+
+        if context['object_list']:
+            for obj in context['object_list']:
+                total += obj.biaya
+        context['total'] = total
+        context['form'] = self.form
+        return context
+
+    def post(self, request):
+        querystring = ""
+        post_var = request.POST
+
+        if post_var:
+            if all(key in post_var for key in self.valid_keys):
+                form = self.form(data=post_var)
+                if form.is_valid():
+                    start_date = form.cleaned_data['start_date']
+                    end_date = form.cleaned_data['end_date']
+
+                    querystring = "?start_date={}&end_date={}".format(
+                        start_date, end_date
+                    )
+                else:
+                    messages.add_message(request, messages.ERROR, form.errors)
+
+        return HttpResponseRedirect(reverse('report:biaya_per_tanggal') + querystring)
+
+
+class BBMabReportView(ListView):
+    template_name = 'report/report_bbm_ab.html'
+    model = Bbmab
+    valid_keys = ['alatid', 'start_date', 'end_date']
+    prefilled_keys = ['alatid']
+    form = BBMReportForm
+
+    def get_queryset(self):
+        queryset = None
+        get_var = self.request.GET
+
+        if get_var:
+            # Ensure all parameters are not empty
+            if all(key in get_var for key in self.valid_keys):
+                alat_id = get_var['alatid']
+                start_date = get_var['start_date']
+                end_date = get_var['end_date']
+
+                queryset = self.model.objects.filter(
+                    alatid_id=int(alat_id), tanggal__range=[start_date, end_date]
+                )
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        total_bbm = 0
+        form_data = {}
+
+        for key in self.prefilled_keys:
+            try:
+                form_data[key] = self.request.GET[key]
+            except KeyError:
+                pass
+        form = self.form(data=form_data)
+
+        if context['object_list']:
+            for obj in context['object_list']:
+                total_bbm += obj.ltrmasuk
+        context['total_bbm'] = total_bbm
+        context['form'] = form
+        return context
+
+    def post(self, request):
+        querystring = ""
+        post_var = request.POST
+
+        if post_var:
+            if all(key in post_var for key in self.valid_keys):
+                form = self.form(data=post_var)
+                if form.is_valid():
+                    alatid = form.cleaned_data['alatid'].id
+                    start_date = form.cleaned_data['start_date']
+                    end_date = form.cleaned_data['end_date']
+
+                    querystring = "?alatid={}&start_date={}&end_date={}".format(
+                        alatid, start_date, end_date
+                    )
+                else:
+                    messages.add_message(request, messages.ERROR, form.errors)
+
+        return HttpResponseRedirect(reverse('report:bbm_ab') + querystring)
