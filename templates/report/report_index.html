@@ -9,6 +9,7 @@
   <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Lihat Report</h1>
   </div>
+
   <div class="container">
     <div class="card-deck mb-3 text-center">
 
@@ -68,6 +69,42 @@
 
           <ul class="list-unstyled mt-3 mb-4">
             <li>Lihat Report BBM Alat Berat</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="card-deck mb-3 text-center">
+
+      <div class="card mb-4 box-shadow">
+        <div class="card-header" style="background-color: rgb(255, 110, 110);">
+          <h4 class="my-0 font-weight-normal"><b>Tangki Induk</b></h4>
+        </div>
+        <div class="card-body">
+          <a href="{% url 'report:transaksi_tangki_induk' %}">
+            <i class="fa fa-bus fa-3x"></i>
+          </a>
+
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>Lihat Report Transaksi Tangki Induk</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card mb-4 box-shadow">
+        <div class="card-header" style="background-color: rgb(255, 110, 110);">
+          <h4 class="my-0 font-weight-normal"><b>Transaksi Mobil Tangki</b></h4>
+        </div>
+        <div class="card-body">
+          <a href="{% url 'report:transaksi_mobil_tangki' %}">
+            <i class="fa fa-truck fa-3x"></i>
+          </a>
+
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>Lihat Report Biaya Transaksi Mobil Tangki</li>
           </ul>
         </div>
       </div>
