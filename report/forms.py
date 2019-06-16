@@ -86,3 +86,7 @@ class TransaksiMobilTangkiForm(DateRangeFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['mobilid'].widget.attrs = {'class': 'form-control mr-3'}
         self.fields['mobilid'].queryset = Mobiltangki.objects.all()
+
+
+class ProduksiReportForm(DateRangeFormMixin):
+    pass

@@ -6,25 +6,19 @@ from django.views.generic import ListView, TemplateView
 
 from alatberat.models import Bbmab, Biayaab, Hourmeter
 from bbm.models import Transaksitangkiinduk, Transaksimobiltangki
+from produksi.models import Hasilore
 
 from .forms import HourmeterReportForm, BiayaPerAlatReportForm, BiayaPerTanggalReportForm, BBMReportForm
 from .forms import TransaksiTangkiIndukForm, TransaksiMobilTangkiForm
+from .forms import ProduksiReportForm
 
 
-"""
-REPORT INDEX
-"""
-
-
+# REPORT INDEX
 class ReportIndexView(TemplateView):
     template_name = 'report/report_index.html'
 
 
-"""
-REPORT ALAT BERAT
-"""
-
-
+# REPORT ALAT BERAT
 class HourmeterReportView(ListView):
     template_name = 'report/report_transaksi_tangki_induk.html'
     model = Hourmeter
@@ -274,11 +268,7 @@ class BBMabReportView(ListView):
         return HttpResponseRedirect(reverse('report:bbm_ab') + querystring)
 
 
-"""
-REPORT BBM
-"""
-
-
+# REPORT BBM
 class TransaksiTangkiIndukReportView(ListView):
     template_name = 'report/report_transaksi_tangki_induk.html'
     model = Transaksitangkiinduk
@@ -367,7 +357,10 @@ class TransaksiMobilTangkiReportView(ListView):
                 end_date = get_var['end_date']
 
                 queryset = self.model.objects.filter(
-                    mobilid_id=int(mobilid), tanggal__range=[start_date, end_date]
+                    mobilid_id
+                    \
+
+                    =int(mobilid), tanggal__range=[start_date, end_date]
                 )
         return queryset
 
@@ -409,3 +402,56 @@ class TransaksiMobilTangkiReportView(ListView):
                     messages.add_message(request, messages.ERROR, form.errors)
 
         return HttpResponseRedirect(reverse('report:transaksi_mobil_tangki') + querystring)
+
+
+# REPORT PRODUKSI
+class ProduksiReportView(ListView):
+    template_name = 'report/report_produksi.html'
+    model = Hasilore
+    valid_keys = ['start_date', 'end_date']
+    form = ProduksiReportForm
+
+    def get_queryset(self):
+        queryset = None
+        get_var = self.request.GET
+
+        if get_var:
+            # Ensure all parameters are not empty
+            if all(key in get_var for key in self.valid_keys):
+                start_date = get_var['start_date']
+                end_date = get_var['end_date']
+
+                queryset = self.model.objects.filter(
+                    tanggal__range=[start_date, end_date]
+                )
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        total_hasil = 0
+
+        if context['object_list']:
+            for obj in context['object_list']:
+                total_hasil += obj.hasil
+        context['total_hasil'] = total_hasil
+        context['form'] = self.form
+        return context
+
+    def post(self, request):
+        querystring = ""
+        post_var = request.POST
+
+        if post_var:
+            if all(key in post_var for key in self.valid_keys):
+                form = self.form(data=post_var)
+                if form.is_valid():
+                    start_date = form.cleaned_data['start_date']
+                    end_date = form.cleaned_data['end_date']
+
+                    querystring = "?start_date={}&end_date={}".format(
+                        start_date, end_date
+                    )
+                else:
+                    messages.add_message(request, messages.ERROR, form.errors)
+
+        return HttpResponseRedirect(reverse('report:hasil_produksi') + querystring)
