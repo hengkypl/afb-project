@@ -1,11 +1,13 @@
 from django import forms
 
 from alatberat.models import Hourmeter, Alatberat, Operatorab, Biayaab, Bbmab
+from bbm.models import Mobiltangki, Tangkiinduk, Transaksitangkiinduk, Transaksimobiltangki
 from .utils import indo_date_to_iso
 
 """
 ALAT BERAT FORM
 """
+
 
 # Mixin for date range form
 class DateRangeFormMixin(forms.Form):
@@ -59,4 +61,28 @@ class BiayaPerTanggalReportForm(DateRangeFormMixin):
 
 # Inherit Biaya per alat form due to the similarity
 class BBMReportForm(BiayaPerAlatReportForm):
-    pass
+    class Meta:
+        model = Bbmab
+        fields = ('alatid', 'start_date', 'end_date')
+
+
+class TransaksiTangkiIndukForm(DateRangeFormMixin, forms.ModelForm):
+    class Meta:
+        model = Transaksitangkiinduk
+        fields = ('tangkiid', 'start_date', 'end_date')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tangkiid'].widget.attrs = {'class': 'form-control mr-3'}
+        self.fields['tangkiid'].queryset = Tangkiinduk.objects.all()
+
+
+class TransaksiMobilTangkiForm(DateRangeFormMixin, forms.ModelForm):
+    class Meta:
+        model = Transaksimobiltangki
+        fields = ('mobilid', 'start_date', 'end_date')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['mobilid'].widget.attrs = {'class': 'form-control mr-3'}
+        self.fields['mobilid'].queryset = Mobiltangki.objects.all()
