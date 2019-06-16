@@ -19,12 +19,16 @@ from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 
+import afb.views
 import mainmenu.views
 
 urlpatterns = [
     url(r'^afb-adm/', admin.site.urls, name='admin'),
     path('', mainmenu.views.home, name='home'),
+    path('home/', mainmenu.views.home, name='home'),
     path('help/', mainmenu.views.help, name='help'),
+    path('login/', afb.views.LoginView.as_view(), name='login'),
+    path('logout/', afb.views.LogoutView.as_view(), name='logout'),
     path('report/', include(('report.urls', 'report'), namespace='report')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

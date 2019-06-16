@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView, TemplateView
@@ -14,12 +15,12 @@ from .forms import ProduksiReportForm
 
 
 # REPORT INDEX
-class ReportIndexView(TemplateView):
+class ReportIndexView(LoginRequiredMixin, TemplateView):
     template_name = 'report/report_index.html'
 
 
 # REPORT ALAT BERAT
-class HourmeterReportView(ListView):
+class HourmeterReportView(LoginRequiredMixin, ListView):
     template_name = 'report/report_transaksi_tangki_induk.html'
     model = Hourmeter
     valid_keys = ['alatid', 'operatorid', 'start_date', 'end_date']
@@ -90,7 +91,7 @@ class HourmeterReportView(ListView):
         return HttpResponseRedirect(reverse('report:hour_meter') + querystring)
 
 
-class BiayaabPerAlatReportView(ListView):
+class BiayaabPerAlatReportView(LoginRequiredMixin, ListView):
     template_name = 'report/report_biaya_ab_alat.html'
     model = Biayaab
     valid_keys = ['alatid', 'start_date', 'end_date']
@@ -153,7 +154,7 @@ class BiayaabPerAlatReportView(ListView):
         return HttpResponseRedirect(reverse('report:biaya_per_alat') + querystring)
 
 
-class BiayaabPerTanggalReportView(ListView):
+class BiayaabPerTanggalReportView(LoginRequiredMixin, ListView):
     template_name = 'report/report_biaya_ab_tanggal.html'
     model = Biayaab
     valid_keys = ['start_date', 'end_date']
@@ -205,7 +206,7 @@ class BiayaabPerTanggalReportView(ListView):
         return HttpResponseRedirect(reverse('report:biaya_per_tanggal') + querystring)
 
 
-class BBMabReportView(ListView):
+class BBMabReportView(LoginRequiredMixin, ListView):
     template_name = 'report/report_bbm_ab.html'
     model = Bbmab
     valid_keys = ['alatid', 'start_date', 'end_date']
@@ -269,7 +270,7 @@ class BBMabReportView(ListView):
 
 
 # REPORT BBM
-class TransaksiTangkiIndukReportView(ListView):
+class TransaksiTangkiIndukReportView(LoginRequiredMixin, ListView):
     template_name = 'report/report_transaksi_tangki_induk.html'
     model = Transaksitangkiinduk
     valid_keys = ['tangkiid', 'start_date', 'end_date']
@@ -338,7 +339,7 @@ class TransaksiTangkiIndukReportView(ListView):
         return HttpResponseRedirect(reverse('report:transaksi_tangki_induk') + querystring)
 
 
-class TransaksiMobilTangkiReportView(ListView):
+class TransaksiMobilTangkiReportView(LoginRequiredMixin, ListView):
     template_name = 'report/report_transaksi_mobil_tangki.html'
     model = Transaksimobiltangki
     valid_keys = ['mobilid', 'start_date', 'end_date']
@@ -405,7 +406,7 @@ class TransaksiMobilTangkiReportView(ListView):
 
 
 # REPORT PRODUKSI
-class ProduksiReportView(ListView):
+class ProduksiReportView(LoginRequiredMixin, ListView):
     template_name = 'report/report_produksi.html'
     model = Hasilore
     valid_keys = ['start_date', 'end_date']
