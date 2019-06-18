@@ -37,6 +37,7 @@
         <table class="table table-bordered">
           <thead>
             <tr>
+              <th>Nomor</th>
               <th>Tanggal</th>
               <th>Operator</th>
               <th>Hm Awal</th>
@@ -52,6 +53,7 @@
             {% if object_list %}
               {% for obj in object_list%}
                 <tr>
+                  <td>{{forloop.counter}}</td>
                   <td>{{obj.created}}</td>
                   <td>{{obj.operator_name}}</td>
                   <td>{{obj.hmawal}}</td>
@@ -65,13 +67,13 @@
               {% endfor %}
             {% else %}
               <tr>
-                <td colspan="9">No Data</td>
+                <td colspan="10">No Data</td>
               </tr>
             {% endif %}
           </tbody>
           <tfoot>
             <tr>
-              <td class="text-right" colspan="4">Total</td>
+              <td class="text-right" colspan="5">Total</td>
               <td>{{total_jam}}</td>
               <td>{{total_hm_dunia}}</td>
               <td>{{total_overtime}}</td>
