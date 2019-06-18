@@ -9,14 +9,26 @@
   <div class="card-deck mb-3 text-center">
     <div class="card mb-4 box-shadow">
       <div class="card-header" style="background-color: rgb(255, 110, 110);">
-        <h4 class="my-0 font-weight-normal"><b>BBM</b></h4>
+        <h4 class="my-0 font-weight-normal"><b>Tangki Induk</b></h4>
       </div>
       <div class="card-body"><img src="{% static 'pistol.png' %}" height="128" width="128" style="">
 
         <ul class="list-unstyled mt-3 mb-4">
-          <li>Input Pemakaian<br>Bahan Bakar</li>
+          <li>Input Pemakaian<br>Tangki Induk</li>
         </ul>
-        <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'admin:index' %}bbm" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
+        <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'bbm:add_transaksi_tangki_induk' %}" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
+      </div>
+    </div>
+    <div class="card mb-4 box-shadow">
+      <div class="card-header" style="background-color: rgb(255, 110, 110);">
+        <h4 class="my-0 font-weight-normal"><b>Mobil Tangki</b></h4>
+      </div>
+      <div class="card-body"><img src="{% static 'pistol.png' %}" height="128" width="128" style="">
+
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>Input Pemakaian<br>Mobil Tangki</li>
+        </ul>
+        <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'bbm:add_transaksi_mobil_tangki' %}" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
       </div>
     </div>
     <div class="card mb-4 box-shadow">
@@ -28,7 +40,7 @@
         <ul class="list-unstyled mt-3 mb-4">
           <li>Input Biaya Service <br>Alat Berat</li>
         </ul>
-        <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'admin:index' %}alatberat/biayaab/" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
+        <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'alatberat:add_biaya_ab' %}" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
       </div>
     </div>
     <div class="card mb-4 box-shadow">
@@ -40,7 +52,7 @@
         <ul class="list-unstyled mt-3 mb-4">
           <li>Input<br>Hour Meter</li>
         </ul>
-        <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'admin:index' %}alatberat/hourmeter/" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
+        <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'alatberat:add_hour_meter' %}" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
       </div>
     </div>
 

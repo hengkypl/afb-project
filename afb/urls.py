@@ -30,5 +30,7 @@ urlpatterns = [
     path('login/', afb.views.LoginView.as_view(), name='login'),
     path('logout/', afb.views.LogoutView.as_view(), name='logout'),
     path('report/', include(('report.urls', 'report'), namespace='report')),
+    path('alatberat/', include(('alatberat.urls', 'alatberat'), namespace='alatberat')),
+    path('bbm/', include(('bbm.urls', 'bbm'), namespace='bbm')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

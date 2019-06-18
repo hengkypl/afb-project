@@ -32,6 +32,8 @@ class LoginView(TemplateView):
                 login(self.request, user)
                 user_logged_in.send(sender=User, request=request, user=user)
                 messages.add_message(self.request, messages.SUCCESS, 'Logged In')
+                if 'next' in request.GET:
+                    return HttpResponseRedirect(request.GET['next'])
             else:
                 messages.add_message(self.request, messages.ERROR, "User is inactive")
         else:
