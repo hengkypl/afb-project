@@ -21,7 +21,7 @@ class ReportIndexView(LoginRequiredMixin, TemplateView):
 
 # REPORT ALAT BERAT
 class HourmeterReportView(LoginRequiredMixin, ListView):
-    template_name = 'report/report_transaksi_tangki_induk.html'
+    template_name = 'report/report_hour_meter.html'
     model = Hourmeter
     valid_keys = ['alatid', 'operatorid', 'start_date', 'end_date']
     prefilled_keys = ['alatid', 'operatorid']
