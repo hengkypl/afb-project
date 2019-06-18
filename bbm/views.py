@@ -1,11 +1,12 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
 
 from .models import Transaksimobiltangki, Transaksitangkiinduk
 from .forms import TransaksimobilTangkiAddForm, TransaksitangkiindukAddForm
 
 
-class TransaksitangkiindukAddView(CreateView):
+class TransaksitangkiindukAddView(LoginRequiredMixin, CreateView):
     model = Transaksitangkiinduk
     form_class = TransaksitangkiindukAddForm
     template_name = 'bbm/add_transaksi_tangki_induk.html'
@@ -16,7 +17,7 @@ class TransaksitangkiindukAddView(CreateView):
         return super().form_valid(form)
 
 
-class TransaksimobiltangkiAddView(CreateView):
+class TransaksimobiltangkiAddView(LoginRequiredMixin, CreateView):
     model = Transaksimobiltangki
     form_class = TransaksimobilTangkiAddForm
     template_name = 'bbm/add_transaksi_mobil_tangki.html'
