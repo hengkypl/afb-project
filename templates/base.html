@@ -31,6 +31,9 @@
           <a class="p-2 text-dark" href="{% url 'login' %}">Login</a>
         {% endif %}
         <a class="p-2 text-dark" href="{% url 'report:index' %}">Report</a>
+        {% if user.is_staff %}
+          <a class="p-2 text-dark" href="{% url 'admin:index' %}">Admin</a>
+        {% endif %}
       </nav>
 
     </div>

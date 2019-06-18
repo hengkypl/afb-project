@@ -56,19 +56,21 @@
       </div>
     </div>
 
-    <div class="card mb-4 box-shadow">
-      <div class="card-header" style="background-color: rgb(255, 110, 110);">
-        <h4 class="my-0 font-weight-normal"><b>Admin Area</b></h4>
-      </div>
-      <div class="card-body"><img src="{% static 'admin.jpg'%}" height="128" width="128" style="">
+    {% if user.is_staff %}
+      <div class="card mb-4 box-shadow">
+        <div class="card-header" style="background-color: rgb(255, 110, 110);">
+          <h4 class="my-0 font-weight-normal"><b>Admin Area</b></h4>
+        </div>
+        <div class="card-body"><img src="{% static 'admin.jpg'%}" height="128" width="128" style="">
 
-        <ul class="list-unstyled mt-3 mb-4">
+          <ul class="list-unstyled mt-3 mb-4">
 
-          <li>Input<br>Admin</li>
-        </ul>
-        <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'admin:index' %}" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
+            <li>Input<br>Admin</li>
+          </ul>
+          <p><a class="btn btn-lg btn-block btn-primary" href="{% url 'admin:index' %}" role="button" style="background-color: rgb(255, 110, 110)">Click</a></p>
+        </div>
       </div>
-    </div>
+    {% endif %}
 
   </div>
 
