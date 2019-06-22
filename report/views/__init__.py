@@ -16,7 +16,7 @@ from report.forms import ProduksiReportForm
 
 # REPORT INDEX
 class ReportIndexView(LoginRequiredMixin, TemplateView):
-    template_name = 'report/INDEX.html'
+    template_name = 'report/index.html'
 
 
 # REPORT ALAT BERAT
