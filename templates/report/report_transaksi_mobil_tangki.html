@@ -34,7 +34,7 @@
     {% if object_list %}
       <div class="text-right">
         <a href="{% url 'report:export_transaksi_mobil_tangki' %}?{{request.GET.urlencode}}" class="mr-2">Export as PDF</a>
-        <a href="#" class="mr-2">Export as CSV</a>
+        <a href="{% url 'report:export_transaksi_mobil_tangki' %}?{{request.GET.urlencode}}&export_csv=1" class="mr-2">Export as CSV</a>
       </div>
     {% endif %}
   </div>

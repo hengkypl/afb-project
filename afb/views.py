@@ -41,7 +41,7 @@ class LoginView(TemplateView):
         return HttpResponseRedirect(settings.LOGIN_URL)
 
 
-class LogoutView(TemplateView, LoginRequiredMixin):
+class LogoutView(LoginRequiredMixin, TemplateView):
     def render_to_response(self, context, *args, **kwargs):
         User = get_user_model()
         user = self.request.user
