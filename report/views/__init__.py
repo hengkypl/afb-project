@@ -9,14 +9,14 @@ from alatberat.models import Bbmab, Biayaab, Hourmeter
 from bbm.models import Transaksitangkiinduk, Transaksimobiltangki
 from produksi.models import Hasilore
 
-from .forms import HourmeterReportForm, BiayaPerAlatReportForm, BiayaPerTanggalReportForm, BBMReportForm
-from .forms import TransaksiTangkiIndukForm, TransaksiMobilTangkiForm
-from .forms import ProduksiReportForm
+from report.forms import HourmeterReportForm, BiayaPerAlatReportForm, BiayaPerTanggalReportForm, BBMReportForm
+from report.forms import TransaksiTangkiIndukForm, TransaksiMobilTangkiForm
+from report.forms import ProduksiReportForm
 
 
 # REPORT INDEX
 class ReportIndexView(LoginRequiredMixin, TemplateView):
-    template_name = 'report/report_index.html'
+    template_name = 'report/INDEX.html'
 
 
 # REPORT ALAT BERAT
@@ -67,6 +67,7 @@ class HourmeterReportView(LoginRequiredMixin, ListView):
         context['total_hm_dunia'] = total_hm_dunia
         context['total_overtime'] = total_overtime
         context['form'] = form
+        context['qs'] = self.request.GET.urlencode()
         return context
 
     def post(self, request):
@@ -358,10 +359,7 @@ class TransaksiMobilTangkiReportView(LoginRequiredMixin, ListView):
                 end_date = get_var['end_date']
 
                 queryset = self.model.objects.filter(
-                    mobilid_id
-                    \
-
-                    =int(mobilid), tanggal__range=[start_date, end_date]
+                    mobilid_id=int(mobilid), tanggal__range=[start_date, end_date]
                 )
         return queryset
 
