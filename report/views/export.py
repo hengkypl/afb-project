@@ -5,7 +5,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import get_template
 import xhtml2pdf.pisa as pisa
 
-from report.views import HourmeterReportView, BiayaabPerAlatReportView
+from alatberat.models import Alatberat
+from bbm.models import Tangkiinduk, Mobiltangki
+from report.utils import reverse_date_format
+from report.views import HourmeterReportView, BiayaabPerAlatReportView, BiayaabPerTanggalReportView, BBMabReportView
+from report.views import TransaksiTangkiIndukReportView, TransaksiMobilTangkiReportView
+from report.views import ProduksiReportView
 
 
 def get_current_datetime_string():
@@ -14,20 +19,19 @@ def get_current_datetime_string():
     return now_string
 
 
-class PDFRendererView(object):
+class ExportRendererView(object):
     def get_title(self):
         title = self.title_prefix
         try:
-            start_date = self.request.GET['start_date']
-            end_date = self.request.GET['end_date']
-            title = "{} {}-{}".format(title, start_date, end_date)
+            start_date = reverse_date_format(self.request.GET['start_date'])
+            end_date = reverse_date_format(self.request.GET['end_date'])
+            title = "{} {} sampai {}".format(title, start_date, end_date)
         except Exception:
             pass
         return title
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["title"] = self.get_title()
         context["inner_template_name"] = self.inner_template_name
         return context
 
@@ -42,18 +46,68 @@ class PDFRendererView(object):
         pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), response)
         if not pdf.err:
             http_response = HttpResponse(response.getvalue(), content_type='application/pdf')
-            http_response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(self.export_filename)
+            # http_response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(self.export_filename)
             return http_response
         else:
             return HttpResponse("Error Rendering PDF", status=400)
 
 
-class HourMeterExportView(PDFRendererView, HourmeterReportView):
+class ObjectDetailExportView(ExportRendererView):
+    def get_title(self):
+        title = super().get_title()
+        objectid = int(self.request.GET[self.object_key])
+        obj = self.object_model.objects.get(pk=objectid)
+        title = "{} ({})".format(title, obj)
+        return title
+
+
+class HourMeterExportView(ObjectDetailExportView, HourmeterReportView):
     inner_template_name = "report/report_hour_meter_inner.html"
     export_filename = "{}_Hour_Meter.pdf".format(get_current_datetime_string())
     title_prefix = "Hour Meter Report"
+    object_key = 'alatid'
+    object_model = Alatberat
 
 
-class BiayaabPerAlatExportView(PDFRendererView, BiayaabPerAlatReportView):
-    inner_template_name = "report/report_biaya_ab_alatinner"
+class BiayaabPerAlatExportView(ObjectDetailExportView, BiayaabPerAlatReportView):
+    inner_template_name = "report/report_biaya_ab_alat_inner.html"
     export_filename = "{}_Biaya_AB_per_Alat.pdf".format(get_current_datetime_string())
+    title_prefix = "Biaya Alat Berat"
+    object_key = 'alatid'
+    object_model = Alatberat
+
+
+class BiayaabPerTanggalExportView(ExportRendererView, BiayaabPerTanggalReportView):
+    inner_template_name = "report/report_biaya_ab_tanggal_inner.html"
+    export_filename = "{}_Biaya_AB_Per_Tanggal.pdf".format(get_current_datetime_string())
+    title_prefix = "Biaya Alat Berat Per Tanggal"
+
+
+class BBMabExportView(ObjectDetailExportView, BBMabReportView):
+    inner_template_name = "report/report_bbm_ab_inner.html"
+    export_filename = "{}_BBM_Alat_berat.pdf".format(get_current_datetime_string())
+    title_prefix = "BBM Alat Berat"
+    object_key = 'alatid'
+    object_model = Alatberat
+
+
+class TransaksiTangkiIndukExportView(ObjectDetailExportView, TransaksiTangkiIndukReportView):
+    inner_template_name = "report/report_transaksi_tangki_induk_inner.html"
+    export_filename = "{}_Transaksi_Tangki_Induk.pdf".format(get_current_datetime_string())
+    title_prefix = "Transaksi Tangki Induk"
+    object_key = 'tangkiid'
+    object_model = Tangkiinduk
+
+
+class TransaksiMobilTangkiExportView(ObjectDetailExportView, TransaksiMobilTangkiReportView):
+    inner_template_name = "report/report_transaksi_mobil_tangki_inner.html"
+    export_filename = "{}_Transaksi_Mobil_Tangki.pdf".format(get_current_datetime_string())
+    title_prefix = "Transaksi Mobil Tangki"
+    object_key = 'mobilid'
+    object_model = Mobiltangki
+
+
+class ProduksiExportView(ExportRendererView, ProduksiReportView):
+    inner_template_name = "report/report_produksi_inner.html"
+    export_filename = "{}_Hasil_Produksi.pdf".format(get_current_datetime_string())
+    title_prefix = "Hasil Produksi"

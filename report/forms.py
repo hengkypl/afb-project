@@ -2,7 +2,7 @@ from django import forms
 
 from alatberat.models import Hourmeter, Alatberat, Operatorab, Biayaab, Bbmab
 from bbm.models import Mobiltangki, Tangkiinduk, Transaksitangkiinduk, Transaksimobiltangki
-from .utils import indo_date_to_iso
+from .utils import reverse_date_format
 
 """
 ALAT BERAT FORM
@@ -24,11 +24,11 @@ class DateRangeFormMixin(forms.Form):
         end_date = self.data['end_date']
         if start_date > end_date:
             raise forms.ValidationError('Mohon periksa kembali tanggal pencarian anda')
-        return indo_date_to_iso(start_date)
+        return reverse_date_format(start_date)
 
     def clean_end_date(self):
         end_date = self.data['end_date']
-        return indo_date_to_iso(end_date)
+        return reverse_date_format(end_date)
 
 
 class HourmeterReportForm(DateRangeFormMixin, forms.ModelForm):

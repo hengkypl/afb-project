@@ -24,40 +24,11 @@
     </div>
     <div class="card-deck mb-3 text-center">
       <h3>Search result</h3>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Nomor</th>
-              <th>Tanggal</th>
-              <th>Nama Alat</th>
-              <th>Keterangan</th>
-              <th>Biaya</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if object_list %}
-              {% for obj in object_list%}
-                <tr>
-                  <td>{{forloop.counter}}</td>
-                  <td>{{obj.tanggal}}</td>
-                  <td>{{obj.alatid}}</td>
-                  <td>{{obj.keterangan}}</td>
-                  <td>{{obj.biaya}}</td>
-                </tr>
-              {% endfor %}
-            {% else %}
-              <tr>
-                <td colspan="5">No Data</td>
-              </tr>
-            {% endif %}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td class="text-right" colspan="4">Total Biaya</td>
-              <td>{{total}}</td>
-            </tr>
-          </tfoot>
-        </table>
+      {% include "report/report_biaya_ab_tanggal_inner.html" %}
+    </div>
+    <div class="text-right">
+      <a href="{% url 'report:export_biaya_per_tanggal' %}?{{request.GET.urlencode}}" class="mr-2">Export as PDF</a>
+      <a href="#" class="mr-2">Export as CSV</a>
     </div>
   </div>
 

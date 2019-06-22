@@ -67,7 +67,6 @@ class HourmeterReportView(LoginRequiredMixin, ListView):
         context['total_hm_dunia'] = total_hm_dunia
         context['total_overtime'] = total_overtime
         context['form'] = form
-        context['qs'] = self.request.GET.urlencode()
         return context
 
     def post(self, request):

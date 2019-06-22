@@ -13,4 +13,10 @@ urlpatterns = [
     url(r'^transaksi_mobil_tangki$', views.TransaksiMobilTangkiReportView.as_view(), name='transaksi_mobil_tangki'),
     url(r'^hasil_produksi$', views.ProduksiReportView.as_view(), name='hasil_produksi'),
     url(r'^export_hour_meter$', export_views.HourMeterExportView.as_view(), name='export_hour_meter'),
+    url(r'^export_biaya_per_alat$', export_views.BiayaabPerAlatExportView.as_view(), name='export_biaya_per_alat'),
+    url(r'^export_biaya_per_tanggal$', export_views.BiayaabPerTanggalExportView.as_view(), name='export_biaya_per_tanggal'),
+    url(r'^export_bbm_ab$', export_views.BBMabExportView.as_view(), name='export_bbm_ab'),
+    url(r'^export_transaksi_tangki_induk', export_views.TransaksiTangkiIndukExportView.as_view(), name='export_transaksi_tangki_induk'),
+    url(r'^export_transaksi_mobil_tangki', export_views.TransaksiMobilTangkiExportView.as_view(), name='export_transaksi_mobil_tangki'),
+    url(r'^export_produksi', export_views.ProduksiExportView.as_view(), name='export_produksi'),
 ]

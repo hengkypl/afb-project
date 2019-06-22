@@ -1,5 +1,5 @@
-def indo_date_to_iso(date_string):
-    indo_date_splitted = date_string.split("-")
-    indo_date_reversed = list(reversed(indo_date_splitted))
-    iso_date = "-".join(indo_date_reversed)
-    return iso_date
+def reverse_date_format(date_string):
+    date_splitted = date_string.split("-")
+    date_reversed = list(reversed(date_splitted))
+    reversed_date_string = "-".join(date_reversed)
+    return reversed_date_string
