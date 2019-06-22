@@ -46,7 +46,7 @@ class ExportRendererView(object):
         pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), response)
         if not pdf.err:
             http_response = HttpResponse(response.getvalue(), content_type='application/pdf')
-            # http_response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(self.export_filename)
+            http_response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(self.export_filename)
             return http_response
         else:
             return HttpResponse("Error Rendering PDF", status=400)
