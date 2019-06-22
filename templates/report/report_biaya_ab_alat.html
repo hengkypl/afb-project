@@ -31,10 +31,12 @@
       <h3>Search result</h3>
       {% include "report/report_biaya_ab_alat_inner.html" %}
     </div>
-    <div class="text-right">
-      <a href="{% url 'report:export_biaya_per_alat' %}?{{request.GET.urlencode}}" class="mr-2">Export as PDF</a>
-      <a href="#" class="mr-2">Export as CSV</a>
-    </div>
+    {% if object_list %}
+      <div class="text-right">
+        <a href="{% url 'report:export_biaya_per_alat' %}?{{request.GET.urlencode}}" class="mr-2">Export as PDF</a>
+        <a href="#" class="mr-2">Export as CSV</a>
+      </div>
+    {% endif %}
   </div>
 
   <script>
