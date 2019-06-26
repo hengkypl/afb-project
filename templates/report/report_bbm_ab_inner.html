@@ -18,7 +18,7 @@
           <td>{{obj.hmnow}}</td>
           <td>{{obj.hmbefore}}</td>
           <td>{{obj.ltrmasuk}}</td>
-          <td>{{obj.keterangan}}</td>
+          <td>{% if obj.keterangan %}{{obj.keterangan}}{% else %}-{% endif %}</td>
         </tr>
       {% endfor %}
     {% else %}

@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView, TemplateView
@@ -291,10 +292,20 @@ class TransaksiTangkiIndukReportView(LoginRequiredMixin, ListView):
                 queryset = self.model.objects.filter(
                     tangkiid_id=int(tangkiid), tanggal__range=[start_date, end_date]
                 )
+
+                previous_queryset = self.model.objects.filter(
+                    tangkiid=int(tangkiid), tanggal__lt=start_date
+                )
+
+                if previous_queryset:
+                    previous_aggregate = previous_queryset.aggregate(masuk=Sum('masuk'), keluar=Sum('keluar'))
+                    self.saldo_awal = previous_aggregate['masuk'] - previous_aggregate['keluar']
         return queryset
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        saldo_awal = 0
+        sisa = 0
         total_masuk = 0
         total_keluar = 0
         total_amount = 0
@@ -307,11 +318,20 @@ class TransaksiTangkiIndukReportView(LoginRequiredMixin, ListView):
                 pass
         form = self.form(data=form_data)
 
+        if hasattr(self, 'saldo_awal'):
+            saldo_awal = self.saldo_awal
+            sisa = saldo_awal
+
         if context['object_list']:
             for obj in context['object_list']:
                 total_masuk += obj.masuk
                 total_keluar += obj.keluar
                 total_amount += obj.amount
+                # variable set on the fly, not based on db record
+                sisa = sisa + obj.masuk - obj.keluar
+                obj.sisa = sisa
+
+        context['saldo_awal'] = saldo_awal
         context['total_masuk'] = total_masuk
         context['total_keluar'] = total_keluar
         context['total_amount'] = total_amount

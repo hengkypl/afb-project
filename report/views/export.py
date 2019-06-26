@@ -22,6 +22,8 @@ def get_current_datetime_string():
 
 
 class ExportRendererView(object):
+    object_exportables = []
+
     def get_title(self):
         title = self.title_prefix
         try:
@@ -52,10 +54,6 @@ class ExportRendererView(object):
             return HttpResponse("Error Rendering PDF", status=400)
 
     def render_csv_response(self, context):
-        if not hasattr(self, 'object_exportables'):
-            messages.add_message(self.request, messages.ERROR, 'Please set your exportables properties')
-            return HttpResponseRedirect(self.request.META['HTTP_REFERER'])
-
         response = HttpResponse(content_type='text/csv')
         exportables = ["nomor"] + self.object_exportables
         writer = csv.DictWriter(response, fieldnames=exportables)
@@ -149,7 +147,7 @@ class TransaksiTangkiIndukExportView(ObjectDetailExportView, TransaksiTangkiIndu
     title_prefix = "Transaksi Tangki Induk"
     object_key = 'tangkiid'
     object_model = Tangkiinduk
-    object_exportables = ['tanggal', 'keterangan', 'mobilid', 'masuk', 'keluar', 'amount']
+    object_exportables = ['tanggal', 'keterangan', 'mobilid', 'masuk', 'keluar', 'amount', 'sisa']
 
 
 class TransaksiMobilTangkiExportView(ObjectDetailExportView, TransaksiMobilTangkiReportView):

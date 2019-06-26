@@ -18,7 +18,7 @@
           <td>{{obj.alatid}}</td>
           <td>{{obj.kendaraanid}}</td>
           <td>{{obj.keluar}}</td>
-          <td>{{obj.keterangan}}</td>
+          <td>{% if obj.keterangan %}{{obj.keterangan}}{% else %}-{% endif %}</td>
         </tr>
       {% endfor %}
     {% else %}

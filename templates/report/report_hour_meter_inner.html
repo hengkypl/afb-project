@@ -26,7 +26,7 @@
           <td>{{obj.hmdunia}}</td>
           <td>{{obj.ot}}</td>
           <td>{{obj.shift}}</td>
-          <td>{{obj.keterangan}}</td>
+          <td>{% if obj.keterangan %}{{obj.keterangan}}{% else %}-{% endif %}</td>
         </tr>
       {% endfor %}
     {% else %}
