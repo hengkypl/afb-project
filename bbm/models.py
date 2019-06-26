@@ -31,10 +31,20 @@ class Mobiltangki(models.Model):
         ordering = ['nama']
 
 
+class Agent(models.Model):
+    nama = models.CharField(max_length=20)
+    alamat = models.CharField(max_length=100)
+    telp = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.nama
+
+
 # Historical based on Tangki Induk
 class Transaksitangkiinduk(models.Model):
     tanggal = models.DateField()
     tangkiid = models.ForeignKey('Tangkiinduk', on_delete=models.CASCADE)
+    agentid = models.ForeignKey('Agent', on_delete=models.CASCADE)
     masuk = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     mobilid = models.ForeignKey('Mobiltangki', on_delete=models.CASCADE, null=True, blank=True)
     keluar = models.DecimalField(max_digits=15, decimal_places=2, default=0)

@@ -147,7 +147,7 @@ class TransaksiTangkiIndukExportView(ObjectDetailExportView, TransaksiTangkiIndu
     title_prefix = "Transaksi Tangki Induk"
     object_key = 'tangkiid'
     object_model = Tangkiinduk
-    object_exportables = ['tanggal', 'keterangan', 'mobilid', 'masuk', 'keluar', 'amount', 'sisa']
+    object_exportables = ['tanggal', 'keterangan', 'agentid', 'mobilid', 'masuk', 'keluar', 'amount', 'sisa']
 
 
 class TransaksiMobilTangkiExportView(ObjectDetailExportView, TransaksiMobilTangkiReportView):
