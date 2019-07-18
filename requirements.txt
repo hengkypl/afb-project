@@ -6,7 +6,6 @@ freeze==1.0.10
 gunicorn==19.9.0
 phonenumbers==8.10.10
 Pillow==5.4.1
-psycopg2==2.8.2
 psycopg2-binary==2.8.2
 pytz==2019.1
 six==1.12.0
