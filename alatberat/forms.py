@@ -1,28 +1,23 @@
-from django import forms
-
+from afb.forms import AFBForm
 from alatberat.models import Alatberat, Biayaab, Hourmeter, Operatorab
 
 
-class BiayaabAddForm(forms.ModelForm):
+class BiayaabAddForm(AFBForm):
     class Meta:
         model = Biayaab
         fields = ('alatid', 'tanggal', 'biaya', 'keterangan')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.keys():
-            self.fields[field].widget.attrs = {'class': 'form-control'}
         self.fields['alatid'].queryset = Alatberat.objects.all()
 
 
-class HourMeterAddForm(forms.ModelForm):
+class HourMeterAddForm(AFBForm):
     class Meta:
         model = Hourmeter
         fields = ('alatid', 'operatorid', 'tanggal', 'hmawal', 'hmakhir', 'hmdunia', 'ot', 'shift', 'keterangan')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.keys():
-            self.fields[field].widget.attrs = {'class': 'form-control'}
         self.fields['alatid'].queryset = Alatberat.objects.all()
         self.fields['operatorid'].queryset = Operatorab.objects.all()
