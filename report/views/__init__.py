@@ -4,6 +4,7 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView, TemplateView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 from alatberat.models import Bbmab, Biayaab, Hourmeter
@@ -365,6 +366,27 @@ class TransaksiMobilTangkiReportView(LoginRequiredMixin, ListView):
     valid_keys = ['mobilid', 'start_date', 'end_date']
     prefilled_keys = ['mobilid']
     form = TransaksiMobilTangkiForm
+    paginate_by = 10
+
+    def proper_paginate(self, paginator, current_page, neighbors=10):
+        if paginator.num_pages > 2*neighbors:
+            start_index = max(1, current_page-neighbors)
+            end_index = min(paginator.num_pages, current_page + neighbors)
+
+            if end_index < start_index + 2*neighbors:
+                end_index = start_index + 2*neighbors
+            elif start_index > end_index - 2*neighbors:
+                start_index = end_index - 2*neighbors
+            if start_index < 1:
+                end_index -= start_index
+                start_index = 1
+            elif end_index > paginator.num_pages:
+                start_index -= (end_index-paginator.num_pages)
+                end_index = paginator.num_pages
+            page_list = [f for f in range(start_index, end_index+1)]
+
+            return page_list[:(2*neighbors + 1)]
+        return paginator.page_range
 
     def get_queryset(self):
         queryset = None
@@ -373,12 +395,12 @@ class TransaksiMobilTangkiReportView(LoginRequiredMixin, ListView):
         if get_var:
             # Ensure all parameters are not empty
             if all(key in get_var for key in self.valid_keys):
-                mobilid = get_var['mobilid']
-                start_date = get_var['start_date']
-                end_date = get_var['end_date']
+                self.mobilid = get_var['mobilid']
+                self.start_date = get_var['start_date']
+                self.end_date = get_var['end_date']
 
                 queryset = self.model.objects.filter(
-                    mobilid_id=int(mobilid), tanggal__range=[start_date, end_date]
+                    mobilid_id=int(self.mobilid), tanggal__range=[self.start_date, self.end_date]
                 )
         return queryset
 
@@ -386,6 +408,15 @@ class TransaksiMobilTangkiReportView(LoginRequiredMixin, ListView):
         context = super().get_context_data(*args, **kwargs)
         total_keluar = 0
         form_data = {}
+
+        page = int(self.request.GET.get('page', 1))
+        paginator = Paginator(self.get_queryset(), self.paginate_by)
+        try:
+            reports_obj = paginator.page(page)
+        except PageNotAnInteger:
+            reports_obj = paginator.page(1)
+        except EmptyPage:
+            reports_obj = paginator.page(paginator.num_pages)
 
         for key in self.prefilled_keys:
             try:
@@ -399,6 +430,11 @@ class TransaksiMobilTangkiReportView(LoginRequiredMixin, ListView):
                 total_keluar += obj.keluar
         context['total_keluar'] = total_keluar
         context['form'] = form
+        context['mobilid'] = self.mobilid
+        context['start_date'] = self.start_date
+        context['end_date'] = self.end_date
+        context['reports_obj'] = reports_obj
+        context['proper_paginate'] = self.proper_paginate(paginator, page, self.paginate_by)
         return context
 
     def post(self, request):

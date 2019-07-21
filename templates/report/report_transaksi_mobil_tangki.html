@@ -37,6 +37,40 @@
         <a href="{% url 'report:export_transaksi_mobil_tangki' %}?{{request.GET.urlencode}}&export_csv=1" class="mr-2">Export as CSV</a>
       </div>
     {% endif %}
+
+    {% if is_paginated and object_list %}
+		<ul class="pagination">
+            {% if page_obj.has_previous %}
+                {% if page_obj.number == 1 %}
+                    <li class="disabled"><span>⇤</span></li>
+                {% else %}
+                    <li><a class="page-link" href="?mobilid={{ mobilid }}&amp;start_date={{ start_date }}&amp;end_date={{ end_date }}&amp;page=1">⇤</a></li>
+                {% endif %}
+			
+				<li><a class="page-link" href="?mobilid={{ mobilid }}&amp;start_date={{ start_date }}&amp;end_date={{ end_date }}&amp;page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+			{% endif %}
+			
+			{% for i in proper_paginate %}
+				{% if page_obj.number == i %}
+					<li class="page-link active bg-primary text-white">
+                        <span>{{ i }} <span class="sr-only">(current)</span></span>
+                    </li>
+				{% else %}
+					<li><a class="page-link" href="?mobilid={{ mobilid }}&amp;start_date={{ start_date }}&amp;end_date={{ end_date }}&amp;page={{ i }}">{{ i }}</a></li>
+				{% endif %}
+			{% endfor %}
+			
+			{% if page_obj.has_next %}
+				<li><a class="page-link" href="?mobilid={{ mobilid }}&amp;start_date={{ start_date }}&amp;end_date={{ end_date }}&amp;page={{ page_obj.next_page_number }}">&raquo;</a></li>
+            
+                {% if page_obj.number == paginator.num_pages %}
+                    <li class="disabled"><span>⇥</span></li>
+                {% else %}
+                    <li><a class="page-link" href="?mobilid={{ mobilid }}&amp;start_date={{ start_date }}&amp;end_date={{ end_date }}&amp;page={{ paginator.num_pages }}">⇥</a></li>
+                {% endif %}
+            {% endif %}
+		</ul>
+	{% endif %}
   </div>
 
   <script>
