@@ -96,7 +96,9 @@ class Biayaab(models.Model):
     alatid = models.ForeignKey('Alatberat', on_delete=models.CASCADE)
     tanggal = models.DateField(db_index=True, default=datetime.datetime.now)
     biaya = models.DecimalField(max_digits=15, decimal_places=2)
-    keterangan = models.CharField(max_length=50, default=None, blank=True)
+    sparepart = models.CharField(max_length=50, default=None, blank=True)
+    kerusakan = models.TextField(blank=True)
+    keterangan = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

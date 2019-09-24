@@ -5,7 +5,7 @@ from alatberat.models import Alatberat, Biayaab, Hourmeter, Operatorab
 class BiayaabAddForm(AFBForm):
     class Meta:
         model = Biayaab
-        fields = ('alatid', 'tanggal', 'biaya', 'keterangan')
+        fields = ('alatid', 'tanggal', 'biaya', 'sparepart', 'kerusakan','keterangan')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
