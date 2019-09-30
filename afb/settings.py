@@ -25,7 +25,7 @@ SECRET_KEY = 'n4l@m^vl%shjdb(4l8i(c8_(b4_#sfjbw!9@#2%blev+zeoq)='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', '34.83.20.137']
 
 
 # Application definition
@@ -80,18 +80,18 @@ WSGI_APPLICATION = 'afb.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'afb',
-    #     'USER': 'hpl',
-    #     'PASSWORD': 'meimei',
-    #     'HOST' : 'localhost',
-    #     'PORT' : '5432',
-    # },
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'afb',
+        'USER': 'hpl',
+        'PASSWORD': 'meimei',
+        'HOST' : '34.83.20.137',
+        'PORT' : '5432',
     },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # },
 }
 
 
