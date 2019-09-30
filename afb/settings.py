@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'afb',
         'USER': 'hpl',
         'PASSWORD': 'meimei',
-        'HOST' : '34.83.20.137',
+        'HOST' : 'localhost',
         'PORT' : '5432',
     },
     # 'default': {
