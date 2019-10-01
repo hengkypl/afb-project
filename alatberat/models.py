@@ -25,6 +25,7 @@ class Alatberat(models.Model):
     jadwalhmservice = models.DecimalField(max_digits=15, decimal_places=2, default=0, help_text="Jadwal HM Service alat",
                       verbose_name="Jadwal HM Service berkala kendaraan")
     keterangan = models.TextField(default=None, blank=True)
+    mingguraya = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -46,7 +47,6 @@ class Operatorab(models.Model):
     basicsalary = models.DecimalField(max_digits=15, decimal_places=2, default=0, verbose_name="Basic Salary")
     hadirpagi = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     hadirmalam = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    mingguraya = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     bpjs = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -97,8 +97,8 @@ class Biayaab(models.Model):
     tanggal = models.DateField(db_index=True, default=datetime.datetime.now)
     biaya = models.DecimalField(max_digits=15, decimal_places=2)
     sparepart = models.CharField(max_length=50, default=None, blank=True)
-    kerusakan = models.TextField(blank=True)
-    keterangan = models.TextField(blank=True)
+    kerusakan = models.TextField(default=None, blank=True)
+    keterangan = models.TextField(default=None, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
