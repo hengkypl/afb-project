@@ -24,8 +24,8 @@ class Alatberat(models.Model):
     bbmperjam = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Pemakaian BBM Per Jam")
     jadwalhmservice = models.DecimalField(max_digits=15, decimal_places=2, default=0, help_text="Jadwal HM Service alat",
                       verbose_name="Jadwal HM Service berkala kendaraan")
-    keterangan = models.TextField(default=None, blank=True)
     mingguraya = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    keterangan = models.TextField(default=None, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

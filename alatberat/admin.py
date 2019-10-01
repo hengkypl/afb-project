@@ -3,12 +3,12 @@ from .models import Alatberat, Operatorab, Hourmeter, Biayaab, Bbmab
 
 
 class AlatberatAdmin(admin.ModelAdmin):
-    list_display = ('namaalat', 'hargasewa', 'bbmperjam', 'jenissewa', 'supplier', 'keterangan')
+    list_display = ('namaalat', 'hargasewa', 'bbmperjam', 'jenissewa', 'supplier', 'mingguraya', 'keterangan')
     list_filter = ['supplier']
 
 
 class OperatorabAdmin(admin.ModelAdmin):
-    list_display = ('namaoperator', 'hp', 'basicsalary', 'hadirpagi', 'hadirmalam', 'mingguraya')
+    list_display = ('namaoperator', 'hp', 'basicsalary', 'hadirpagi', 'hadirmalam')
 
 
 class HourmeterAdmin(admin.ModelAdmin):
